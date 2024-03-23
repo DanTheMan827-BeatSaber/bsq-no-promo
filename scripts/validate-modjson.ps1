@@ -1,10 +1,10 @@
 $mod = "./mod.json"
-$modTemplate = Get-Item "./mod.template.json"
-$modJson = Get-Item $mod
-
+$template = "./mod.template.json"
+$modTemplate = -not (Test-Path -Path $template) || Get-Item $template
+$modJson = -not (Test-Path -Path $mod) || Get-Item $mod
 
 if (-not (Test-Path -Path $mod) -or $modTemplate.LastWriteTime -gt $modJson.LastWriteTime) {
-    if (Test-Path -Path ".\mod.template.json") {
+    if (Test-Path -Path $template) {
         & qpm qmod build
         if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
@@ -15,6 +15,8 @@ if (-not (Test-Path -Path $mod) -or $modTemplate.LastWriteTime -gt $modJson.Last
         exit 1
     }
 }
+
+Write-Output "Creating qmod from mod.json"
 
 $psVersion = $PSVersionTable.PSVersion.Major
 if ($psVersion -ge 6) {
