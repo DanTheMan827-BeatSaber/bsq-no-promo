@@ -5,7 +5,7 @@
   "info": {
     "name": "NoPromo",
     "id": "NoPromo",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "url": null,
     "additionalData": {
       "overrideSoName": "libNoPromo.so",
