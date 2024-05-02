@@ -1,6 +1,6 @@
 Param(
     [Parameter(Mandatory=$false)]
-    [String] $logName = "log.log",
+    [String] $logName = "RecentCrash.log",
 
     [Parameter(Mandatory=$false)]
     [Switch] $help
@@ -9,7 +9,7 @@ Param(
 if ($help -eq $true) {
     Write-Output "`"NDK-Stack`" - Processes a tombstone using the debug .so to find file locations"
     Write-Output "`n-- Arguments --`n"
-    
+
     Write-Output "LogName `t`t The file name of the tombstone to process"
 
     exit
