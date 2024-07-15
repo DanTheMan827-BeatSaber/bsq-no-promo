@@ -8,7 +8,7 @@
   "author": "DanTheMan827",
   "version": "0.1.4",
   "packageId": "com.beatgames.beatsaber",
-  "packageVersion": "1.37.0_9064817954",
+  "packageVersion": "1.37.1_9895289101",
   "description": "Hides the promo banner on the main screen.",
   "dependencies": [],
   "modFiles": ["${binary}"],

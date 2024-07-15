@@ -46,19 +46,19 @@
     },
     {
       "id": "paper",
-      "versionRange": "^3.0.0",
+      "versionRange": "^3.6.4",
       "additionalData": {
         "private": true
       }
     },
     {
       "id": "bs-cordl",
-      "versionRange": "3700.*",
+      "versionRange": "3701.*",
       "additionalData": {}
     },
     {
       "id": "scotland2",
-      "versionRange": "^0.1.0",
+      "versionRange": "^0.1.4",
       "additionalData": {
         "includeQmod": false,
         "private": true
