@@ -31,6 +31,9 @@ env:
     module_id: NoPromo
     qmod_name: NoPromo
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -87,38 +90,61 @@ jobs:
       run: mv "./build/debug/${{ steps.libname.outputs.NAME }}" "./build/debug_${{ steps.libname.outputs.NAME }}"
 
     - name: Upload non-debug artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.libname.outputs.NAME }}
         path: ./build/${{ steps.libname.outputs.NAME }}
         if-no-files-found: error
 
     - name: Upload debug artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: debug_${{ steps.libname.outputs.NAME }}
         path: ./build/debug_${{ steps.libname.outputs.NAME }}
         if-no-files-found: error
 
     - name: Upload qmod artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.qmod_name}}.qmod
         path: ./${{ env.qmod_name }}.qmod
         if-no-files-found: error
 
     # if we had a tag, we should make a release
-    - name: Upload release artifacts
+    - name: Upload release .qmod
       if: startsWith(github.ref, 'refs/tags/v')
-      id: upload_file_release
-      uses: softprops/action-gh-release@v0.1.15
+      id: upload_file_qmod
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ github.event.inputs.version }}
-        draft: true
+        draft: false
         generate_release_notes: true
         files: |
-          ./build/${{ steps.libname.outputs.NAME }}
-          ./build/debug_${{ steps.libname.outputs.NAME }}
           ./${{ env.qmod_name }}.qmod
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload release .so artifacts
+      if: startsWith(github.ref, 'refs/tags/v')
+      id: upload_file_so
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        files: |
+          ./build/${{ steps.libname.outputs.NAME }}
+          ./build/debug_${{ steps.libname.outputs.NAME }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Make PR to mod repo
+      if: ("${{ secrets.BSQMODS_TOKEN }}" != "" && startsWith(github.ref, 'refs/tags/v'))
+      id: qmod-release
+      uses: QuestPackageManager/qmod-repo-publish-action@main
+      with:
+        token: ${{ secrets.BSQMODS_TOKEN }}
+        qmod_url:
+          ${{
+          fromJSON(steps.upload_file_qmod.outputs.assets)[0].browser_download_url
+          }}
+        qmod_repo_owner: 'QuestPackageManager'
+        qmod_repo_name: 'bsqmods'
