@@ -1,0 +1,17 @@
+#include "main.hpp"
+#include "autohooks.hpp"
+
+// GlobalNamespace
+#include "GlobalNamespace/MainMenuViewController.hpp"
+
+// UnityEngine
+#include "UnityEngine/GameObject.hpp"
+
+using namespace GlobalNamespace;
+
+// Hooks the MainMenuViewController to hide the musicPackPromoBanner object.
+MAKE_AUTO_HOOK_MATCH(MainMenuViewController_DidActivate, &MainMenuViewController::DidActivate, void, MainMenuViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
+    Logger.debug("MainMenuViewController_DidActivate");
+    self->____musicPackPromoBanner->get_gameObject()->SetActive(false);
+    MainMenuViewController_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
+}

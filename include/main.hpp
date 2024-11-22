@@ -11,9 +11,6 @@
 #include "beatsaber-hook/shared/utils/logging.hpp"
 #include "beatsaber-hook/shared/utils/typedefs.h"
 
-/// @brief Stores the ID and version of our mod, and is sent to the modloader upon startup
-modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
-
 /// @brief A logger, useful for printing debug messages
 /// @return
 static constexpr auto Logger = Paper::ConstLoggerContext(MOD_ID "_" VERSION);
