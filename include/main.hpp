@@ -11,10 +11,6 @@
 #include "beatsaber-hook/shared/utils/logging.hpp"
 #include "beatsaber-hook/shared/utils/typedefs.h"
 
-/// @brief A logger, useful for printing debug messages
-/// @return
-static constexpr auto Logger = Paper::ConstLoggerContext(MOD_ID "_" VERSION);
-
 #define MOD_EXPORT __attribute__((visibility("default")))
 #ifdef __cplusplus
 #define MOD_EXPORT_FUNC extern "C" MOD_EXPORT

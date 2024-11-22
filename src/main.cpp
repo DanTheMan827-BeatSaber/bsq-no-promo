@@ -1,12 +1,13 @@
 #include "main.hpp"
-#include "autohooks.hpp"
+#include "AutoHooks.hpp"
+#include "Logger.hpp"
+#include "modInfo.hpp"
 
 /// @brief Called at the early stages of game loading
 /// @param info
 /// @return
 MOD_EXPORT_FUNC void setup(CModInfo& info) {
-    info.id = MOD_ID;
-    info.version = VERSION;
+    info = modInfo.to_c();
 
     Logger.info("Completed setup!");
 }
