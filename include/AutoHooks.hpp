@@ -34,7 +34,7 @@ namespace AutoHooks {
     };                                                                                                   \
     static Auto_Hook_##name_ Auto_Hook_Instance_##name_
 
-namespace { // Auto Hook Macros
+namespace AutoHooks::HookMacros{
 #define MAKE_AUTO_HOOK(name_, addr_, retval, ...) \
 struct Hook_##name_ { \
     constexpr static const char* name() { return #name_; } \
@@ -434,7 +434,7 @@ retval Hook_##name_::hook_##name_(__VA_ARGS__)
 /**
 Auto hooks that automatically install themselves when the game is loaded.
  */
-namespace AutoHooks::OrigHookMacros { // Auto Orig Hook Macros
+namespace AutoHooks::OrigHookMacros {
 #define MAKE_AUTO_HOOK_ORIG(name_, addr_, retval, ...) \
 struct Hook_##name_ { \
     constexpr static const char* name() { return #name_; } \
@@ -830,3 +830,6 @@ struct Hook_##name_ { \
 HOOK_AUTO_INSTALL_ORIG(name_); \
 retval Hook_##name_::hook_##name_(__VA_ARGS__)
 }
+
+using namespace AutoHooks::HookMacros;
+using namespace AutoHooks::OrigHookMacros
