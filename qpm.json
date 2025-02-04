@@ -75,7 +75,7 @@
     },
     {
       "id": "bs-cordl",
-      "versionRange": "4000.*",
+      "versionRange": "4010.*",
       "additionalData": {}
     },
     {
