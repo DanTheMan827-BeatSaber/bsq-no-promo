@@ -15,5 +15,5 @@
   "remoteUser": "codespace",
   "containerUser": "codespace",
   "onCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
-  "postCreateCommand": "qpm restore"
+  "postCreateCommand": "qpm ndk resolve -d && qpm restore"
 }

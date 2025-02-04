@@ -1,8 +1,9 @@
 # NoPromo
+
 Hides the promo banner on the main screen.
 
-Use `qpm-rust s build` to build
-Same goes for `qpm-rust s copy` and `qpm-rust s qmod`
+Use `qpm s build` to build
+Same goes for `qpm s copy` and `qpm s qmod`
 
 ## Credits
 
