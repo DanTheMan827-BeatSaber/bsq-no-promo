@@ -1,12 +1,12 @@
 {
-  "$schema": "https://github.com/QuestPackageManager/QPM.Package/raw/refs/heads/main/qpm.schema.json",
+  "$schema": "https://raw.githubusercontent.com/QuestPackageManager/QPM.Package/refs/heads/main/qpm.schema.json",
+  "version": "0.4.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
-  "version": "0.4.0",
   "info": {
     "name": "NoPromo",
     "id": "NoPromo",
-    "version": "0.1.5",
+    "version": "0.1.0",
     "url": null,
     "additionalData": {
       "overrideSoName": "libNoPromo.so",
@@ -25,9 +25,24 @@
         "qpm s clean",
         "qpm s qmod"
       ],
+      "copy": [
+        "pwsh ./scripts/copy.ps1 $0:?"
+      ],
       "deepclean": [
         "pwsh ./scripts/build.ps1 -clean -skipBuild",
         "qpm clear"
+      ],
+      "logcat": [
+        "pwsh ./scripts/start-logging.ps1"
+      ],
+      "make-hooking": [
+        "pwsh ./common-stuff/scripts/make-hooking.ps1"
+      ],
+      "qmod": [
+        "qpm s build",
+        "qpm s update-version",
+        "qpm qmod zip --skip_build",
+        "qpm s update-version -- -restore"
       ],
       "rebuild": [
         "qpm s deepclean",
@@ -36,16 +51,6 @@
       "rebuild-qmod": [
         "qpm s deepclean",
         "qpm s qmod"
-      ],
-      "copy": [
-        "pwsh ./scripts/copy.ps1 $0:?"
-      ],
-      "logcat": [
-        "pwsh ./scripts/start-logging.ps1"
-      ],
-      "qmod": [
-        "qpm s build",
-        "qpm qmod zip"
       ],
       "restart": [
         "pwsh ./scripts/restart-game.ps1"
@@ -56,21 +61,27 @@
       "tomb": [
         "pwsh ./scripts/pull-tombstone.ps1"
       ],
-      "make-hooking": [
-        "pwsh ./common-stuff/scripts/make-hooking.ps1"
+      "update-version": [
+        "pwsh ./scripts/update-version.ps1 $0:?"
       ]
     },
-    "ndk": "^27.0.0",
+    "ndk": "^27.2.12479018",
     "qmodIncludeDirs": [
       "./build",
       "./extern/libs"
     ],
+    "qmodIncludeFiles": [],
     "qmodOutput": "./NoPromo.qmod"
   },
   "dependencies": [
     {
-      "id": "paper2_scotland2",
-      "versionRange": "^4.5.0",
+      "id": "autohooks",
+      "versionRange": "^0.1.0",
+      "additionalData": {}
+    },
+    {
+      "id": "beatsaber-hook",
+      "versionRange": "^6.4.0",
       "additionalData": {}
     },
     {
@@ -79,8 +90,8 @@
       "additionalData": {}
     },
     {
-      "id": "beatsaber-hook",
-      "versionRange": "^6.3.0",
+      "id": "paper2_scotland2",
+      "versionRange": "^4.5.0",
       "additionalData": {}
     },
     {

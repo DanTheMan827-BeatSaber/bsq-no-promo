@@ -1,14 +1,21 @@
+# This script pulls the most recent tombstone file from the Quest device.
+# Optionally, it can analyze the tombstone using ndk-stack.
+
 Param(
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [String] $fileName = "RecentCrash.log",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [Switch] $analyze,
 
-    [Parameter(Mandatory=$false)]
-    [Switch] $help
+    [Parameter(Mandatory = $false)]
+    [Switch] $help,
+
+    [Parameter(Mandatory = $false)]
+    [String] $packageId = "com.beatgames.beatsaber"
 )
 
+# Display help information if requested
 if ($help -eq $true) {
     Write-Output "`"Pull-Tombstone`" - Finds and pulls the most recent tombstone from your quest, optionally analyzing it with ndk-stack"
     Write-Output "`n-- Arguments --`n"
@@ -19,14 +26,21 @@ if ($help -eq $true) {
     exit
 }
 
+# Check if package_id.txt exists and use that as the package name
+if (Test-Path "$PSScriptRoot/../package_id.txt") {
+    $packageId = Get-Content "$PSScriptRoot/../package_id.txt"
+    Write-Output "Using package ID from package_id.txt: $packageId"
+}
+
 $global:currentDate = get-date
 $global:recentDate = $Null
 $global:recentTombstone = $Null
 
+# Loop through possible tombstone files to find the most recent one
 for ($i = 0; $i -lt 3; $i++) {
-    $stats = & adb shell stat /sdcard/Android/data/com.beatgames.beatsaber/files/tombstone_0$i
+    $stats = & adb shell stat "/sdcard/Android/data/$packageId/files/tombstone_0$i"
     $date = (Select-String -Input $stats -Pattern "(?<=Modify: )\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?=.\d{9})").Matches.Value
-    if([string]::IsNullOrEmpty($date)) {
+    if ([string]::IsNullOrEmpty($date)) {
         Write-Output "Failed to pull tombstone, exiting..."
         exit 1;
     }
@@ -34,7 +48,8 @@ for ($i = 0; $i -lt 3; $i++) {
     $difference = [math]::Round(($currentDate - $dateObj).TotalMinutes)
     if ($difference -eq 1) {
         Write-Output "Found tombstone_0$i $difference minute ago"
-    } else {
+    }
+    else {
         Write-Output "Found tombstone_0$i $difference minutes ago"
     }
     if (-not $recentDate -or $recentDate -lt $dateObj) {
@@ -45,8 +60,10 @@ for ($i = 0; $i -lt 3; $i++) {
 
 Write-Output "Latest tombstone was tombstone_0$recentTombstone"
 
-& adb pull /sdcard/Android/data/com.beatgames.beatsaber/files/tombstone_0$recentTombstone $fileName
+# Pull the most recent tombstone file
+& adb pull "/sdcard/Android/data/$packageId/files/tombstone_0$recentTombstone" "$fileName"
 
+# Analyze the tombstone file if requested
 if ($analyze) {
-    & $PSScriptRoot/ndk-stack.ps1 -logName:$fileName
+    & "$PSScriptRoot/ndk-stack.ps1" "-logName:$fileName"
 }

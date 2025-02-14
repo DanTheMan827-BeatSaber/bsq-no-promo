@@ -1,0 +1,4 @@
+# This file includes a list of directories relative to the CMakeLists.txt file
+# that should be added to the include paths.  One per line.
+
+common-stuff/include
